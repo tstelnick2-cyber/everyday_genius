@@ -1,0 +1,20 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "zbu7_JHMeQcyjI2W8wwfn"
+uri = "file://artifacts/everydaygenius/public/hero-abstract.png"
+type = "image"
+title = "dark cinematic hero abstract"
+
+[[generated]]
+id = "POq-POS5xE3fSqUDiWIE9"
+uri = "file://artifacts/everydaygenius/public/guide-1-cover.png"
+type = "image"
+title = "guide 1 abstract cover"
+
+[[generated]]
+id = "bCpOd6jxJHAH3-VDmtl0Z"
+uri = "file://artifacts/everydaygenius/public/guide-2-cover.png"
+type = "image"
+title = "guide 2 abstract cover"

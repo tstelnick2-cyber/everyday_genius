@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "EverydayGenius"
+version = "1.0.0"
+id = "artifacts/everydaygenius"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 18618
+
+[services.development]
+run = "pnpm --filter @workspace/everydaygenius run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/everydaygenius", "run", "build" ]
+publicDir = "artifacts/everydaygenius/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "18618"
+BASE_PATH = "/"
