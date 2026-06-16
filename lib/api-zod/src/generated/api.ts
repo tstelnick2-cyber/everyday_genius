@@ -26,3 +26,54 @@ export const CreateSubscriberBody = zod.object({
 })
 
 
+/**
+ * @summary Admin login
+ */
+export const AdminLoginBody = zod.object({
+  "password": zod.string()
+})
+
+export const AdminLoginResponse = zod.object({
+  "authenticated": zod.boolean()
+})
+
+
+/**
+ * @summary Admin logout
+ */
+export const AdminLogoutResponse = zod.object({
+  "authenticated": zod.boolean()
+})
+
+
+/**
+ * @summary Get admin auth status
+ */
+export const GetAdminStatusResponse = zod.object({
+  "authenticated": zod.boolean()
+})
+
+
+/**
+ * @summary List all subscribers (admin only)
+ */
+export const ListSubscribersResponseItem = zod.object({
+  "id": zod.number(),
+  "email": zod.string(),
+  "createdAt": zod.string()
+})
+export const ListSubscribersResponse = zod.array(ListSubscribersResponseItem)
+
+
+/**
+ * @summary Get upload status for all guides
+ */
+export const GetGuidesStatusResponseItem = zod.object({
+  "id": zod.string(),
+  "title": zod.string(),
+  "hasFile": zod.boolean(),
+  "fileName": zod.string().nullish()
+})
+export const GetGuidesStatusResponse = zod.array(GetGuidesStatusResponseItem)
+
+

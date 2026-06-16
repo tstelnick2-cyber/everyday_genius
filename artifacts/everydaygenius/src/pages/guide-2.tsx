@@ -1,9 +1,15 @@
-import React from "react";
+import { useState } from "react";
 import { Layout } from "@/components/layout";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
+import { DownloadModal } from "@/components/download-modal";
+
+const GUIDE_ID = "underground-closing-techniques";
+const GUIDE_TITLE = "Underground Techniques Used by 7-Figure Closers";
 
 export default function Guide2() {
+  const [showModal, setShowModal] = useState(false);
+
   return (
     <Layout>
       <div className="container mx-auto px-6 py-12 md:py-24">
@@ -20,9 +26,9 @@ export default function Guide2() {
                   SECRET KNOWLEDGE
                 </span>
               </div>
-              <img 
-                src="/guide-2-cover.png" 
-                alt="Guide Cover" 
+              <img
+                src="/guide-2-cover.png"
+                alt="Guide Cover"
                 className="w-full h-full object-cover grayscale contrast-125"
               />
             </div>
@@ -35,7 +41,7 @@ export default function Guide2() {
                 SECRET KNOWLEDGE
               </div>
               <h1 className="text-4xl md:text-6xl font-serif font-bold leading-[1.1] tracking-tight">
-                Underground Techniques Used by 7-Figure Closers
+                {GUIDE_TITLE}
               </h1>
               <p className="text-xl text-muted-foreground font-light leading-relaxed pt-6">
                 The playbook they don't want you to see. While average salespeople rely on scripts, the top 1% use invisible influence. Step into the mind of a 7-figure closer.
@@ -44,7 +50,7 @@ export default function Guide2() {
 
             <div className="space-y-8">
               <h2 className="text-2xl font-serif font-bold">What's Inside the Briefing</h2>
-              
+
               <ul className="space-y-6">
                 {[
                   "The Pre-Frame Protocol: Winning the deal before the actual conversation starts.",
@@ -63,8 +69,13 @@ export default function Guide2() {
             </div>
 
             <div className="pt-8">
-              <Button size="lg" className="w-full sm:w-auto text-lg h-16 px-12 uppercase tracking-widest font-bold" asChild data-testid="button-download">
-                <a href="#">Get the Guide</a>
+              <Button
+                size="lg"
+                className="w-full sm:w-auto text-lg h-16 px-12 uppercase tracking-widest font-bold"
+                onClick={() => setShowModal(true)}
+                data-testid="button-download"
+              >
+                Get the Guide
               </Button>
               <p className="text-xs text-muted-foreground mt-4 font-mono uppercase tracking-wider text-center sm:text-left">
                 Immediate Access • 100% Confidential
@@ -73,6 +84,14 @@ export default function Guide2() {
           </div>
         </div>
       </div>
+
+      {showModal && (
+        <DownloadModal
+          guideId={GUIDE_ID}
+          title={GUIDE_TITLE}
+          onClose={() => setShowModal(false)}
+        />
+      )}
     </Layout>
   );
 }

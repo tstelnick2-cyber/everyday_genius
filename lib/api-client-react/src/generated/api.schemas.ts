@@ -23,3 +23,19 @@ export interface ErrorResponse {
   error: string;
 }
 
+export interface AdminLoginInput {
+  password: string;
+}
+
+export interface AdminStatus {
+  authenticated: boolean;
+}
+
+export interface GuideStatus {
+  id: string;
+  title: string;
+  hasFile: boolean;
+  /** @nullable */
+  fileName?: string | null;
+}
+

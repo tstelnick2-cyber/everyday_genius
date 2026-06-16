@@ -12,6 +12,10 @@ tags:
     description: Health operations
   - name: subscribers
     description: Email subscriber operations
+  - name: admin
+    description: Admin operations
+  - name: guides
+    description: Guide operations
 paths:
   /healthz:
     get:
@@ -57,6 +61,88 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /admin/login:
+    post:
+      operationId: adminLogin
+      tags: [admin]
+      summary: Admin login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdminLoginInput"
+      responses:
+        "200":
+          description: Logged in
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminStatus"
+        "401":
+          description: Wrong password
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /admin/logout:
+    post:
+      operationId: adminLogout
+      tags: [admin]
+      summary: Admin logout
+      responses:
+        "200":
+          description: Logged out
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminStatus"
+  /admin/status:
+    get:
+      operationId: getAdminStatus
+      tags: [admin]
+      summary: Get admin auth status
+      responses:
+        "200":
+          description: Auth status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminStatus"
+  /admin/subscribers:
+    get:
+      operationId: listSubscribers
+      tags: [admin]
+      summary: List all subscribers (admin only)
+      responses:
+        "200":
+          description: Subscriber list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Subscriber"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /guides/status:
+    get:
+      operationId: getGuidesStatus
+      tags: [guides]
+      summary: Get upload status for all guides
+      responses:
+        "200":
+          description: Guide status list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GuideStatus"
 components:
   schemas:
     HealthStatus:
@@ -94,3 +180,32 @@ components:
       properties:
         error:
           type: string
+    AdminLoginInput:
+      type: object
+      required:
+        - password
+      properties:
+        password:
+          type: string
+    AdminStatus:
+      type: object
+      required:
+        - authenticated
+      properties:
+        authenticated:
+          type: boolean
+    GuideStatus:
+      type: object
+      required:
+        - id
+        - title
+        - hasFile
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        hasFile:
+          type: boolean
+        fileName:
+          type: ["string", "null"]

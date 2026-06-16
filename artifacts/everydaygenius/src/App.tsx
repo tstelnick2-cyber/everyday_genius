@@ -6,6 +6,7 @@ import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
 import Guide1 from "@/pages/guide-1";
 import Guide2 from "@/pages/guide-2";
+import Admin from "@/pages/admin";
 import { useEffect } from "react";
 
 const queryClient = new QueryClient();
@@ -16,6 +17,7 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/guides/how-to-close-any-deal" component={Guide1} />
       <Route path="/guides/underground-closing-techniques" component={Guide2} />
+      <Route path="/admin" component={Admin} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -23,7 +25,6 @@ function Router() {
 
 function App() {
   useEffect(() => {
-    // Force dark mode
     document.documentElement.classList.add("dark");
   }, []);
 

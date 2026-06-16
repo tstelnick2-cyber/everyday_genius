@@ -1,9 +1,15 @@
-import React from "react";
+import { useState } from "react";
 import { Layout } from "@/components/layout";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
+import { DownloadModal } from "@/components/download-modal";
+
+const GUIDE_ID = "how-to-close-any-deal";
+const GUIDE_TITLE = "How to Close Any Business Deal";
 
 export default function Guide1() {
+  const [showModal, setShowModal] = useState(false);
+
   return (
     <Layout>
       <div className="container mx-auto px-6 py-12 md:py-24">
@@ -20,9 +26,9 @@ export default function Guide1() {
                   SECRET KNOWLEDGE
                 </span>
               </div>
-              <img 
-                src="/guide-1-cover.png" 
-                alt="Guide Cover" 
+              <img
+                src="/guide-1-cover.png"
+                alt="Guide Cover"
                 className="w-full h-full object-cover grayscale contrast-125"
               />
             </div>
@@ -35,7 +41,7 @@ export default function Guide1() {
                 SECRET KNOWLEDGE
               </div>
               <h1 className="text-4xl md:text-6xl font-serif font-bold leading-[1.1] tracking-tight">
-                How to Close Any Business Deal
+                {GUIDE_TITLE}
               </h1>
               <p className="text-xl text-muted-foreground font-light leading-relaxed pt-6">
                 Closing isn't about pushing. It's about positioning. Discover the precise psychological levers and strategic frameworks used by elite negotiators to command the room and dictate the terms.
@@ -44,7 +50,7 @@ export default function Guide1() {
 
             <div className="space-y-8">
               <h2 className="text-2xl font-serif font-bold">What's Inside the Briefing</h2>
-              
+
               <ul className="space-y-6">
                 {[
                   "The 'Walk-Away' Framework: How to manufacture genuine leverage in any scenario.",
@@ -62,8 +68,13 @@ export default function Guide1() {
             </div>
 
             <div className="pt-8">
-              <Button size="lg" className="w-full sm:w-auto text-lg h-16 px-12 uppercase tracking-widest font-bold" asChild data-testid="button-download">
-                <a href="#">Download Free PDF</a>
+              <Button
+                size="lg"
+                className="w-full sm:w-auto text-lg h-16 px-12 uppercase tracking-widest font-bold"
+                onClick={() => setShowModal(true)}
+                data-testid="button-download"
+              >
+                Download Free PDF
               </Button>
               <p className="text-xs text-muted-foreground mt-4 font-mono uppercase tracking-wider text-center sm:text-left">
                 Immediate Access • 100% Confidential
@@ -72,6 +83,14 @@ export default function Guide1() {
           </div>
         </div>
       </div>
+
+      {showModal && (
+        <DownloadModal
+          guideId={GUIDE_ID}
+          title={GUIDE_TITLE}
+          onClose={() => setShowModal(false)}
+        />
+      )}
     </Layout>
   );
 }
