@@ -10,9 +10,14 @@ primary_region = "iad"
   UPLOADS_DIR = "/uploads"
   FRONTEND_URL = ""
 
-# Persistent volume for PDF uploads. Create on the Fly dashboard before deploy:
-#   fly volumes create uploads --size 1
-# Or via CLI before first deploy.
+# Volume support requires >=1GB on shared-cpu-1x. Bake the size into fly.toml
+# so first `fly deploy` provisions correctly without `fly scale vm` beforehand.
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "1gb"
+
+# Persistent volume for PDF uploads. Create before first deploy:
+#   fly volumes create uploads --size 1 -a everydaygenius-api
 [[mounts]]
   source = "uploads"
   destination = "/uploads"

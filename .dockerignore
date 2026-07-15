@@ -1,0 +1,17 @@
+.git
+.gitignore
+.local
+.cache
+node_modules
+dist
+tmp
+*.tsbuildinfo
+.env
+.env.*
+!.env.example
+.vscode
+.idea
+.replit
+.replitignore
+replit.md
+.DS_Store
