@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { apiUrl } from "@/lib/api-url";
 
 interface DownloadModalProps {
   guideId: string;
@@ -70,7 +71,7 @@ export function DownloadModal({ guideId, title, onClose }: DownloadModalProps) {
 
   useEffect(() => {
     if (done) {
-      fetch(`/api/guides/${guideId}/download`, { method: "HEAD" })
+      fetch(apiUrl(`/api/guides/${guideId}/download`), { method: "HEAD", credentials: "include" })
         .then((r) => setFileAvailable(r.ok))
         .catch(() => setFileAvailable(false));
     }
@@ -78,7 +79,7 @@ export function DownloadModal({ guideId, title, onClose }: DownloadModalProps) {
 
   function handleDownload() {
     const a = document.createElement("a");
-    a.href = `/api/guides/${guideId}/download`;
+    a.href = apiUrl(`/api/guides/${guideId}/download`);
     a.download = `${title}.pdf`;
     document.body.appendChild(a);
     a.click();

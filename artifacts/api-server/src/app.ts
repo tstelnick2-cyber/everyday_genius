@@ -27,7 +27,15 @@ app.use(
   }),
 );
 
-app.use(cors({ origin: true, credentials: true }));
+const isProduction = process.env.NODE_ENV === "production";
+const allowedOrigin = process.env.FRONTEND_URL;
+
+app.use(
+  cors({
+    origin: isProduction && allowedOrigin ? allowedOrigin : true,
+    credentials: true,
+  }),
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -38,7 +46,8 @@ app.use(
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     },
   }),

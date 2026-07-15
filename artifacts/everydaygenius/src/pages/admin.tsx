@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useAdminLogin, useAdminLogout, useGetAdminStatus, useGetGuidesStatus, useListSubscribers } from "@workspace/api-client-react";
+import { apiUrl } from "@/lib/api-url";
 
 function LoginForm({ onSuccess }: { onSuccess: () => void }) {
   const [password, setPassword] = useState("");
@@ -77,7 +78,7 @@ function GuideUploadCard({ guide, onUploaded }: { guide: GuideStatus; onUploaded
     formData.append("file", file);
 
     try {
-      const res = await fetch(`/api/guides/${guide.id}/upload`, {
+      const res = await fetch(apiUrl(`/api/guides/${guide.id}/upload`), {
         method: "POST",
         body: formData,
         credentials: "include",
@@ -140,7 +141,7 @@ function GuideUploadCard({ guide, onUploaded }: { guide: GuideStatus; onUploaded
         </button>
         {(guide.hasFile || uploadSuccess) && (
           <a
-            href={`/api/guides/${guide.id}/download`}
+            href={apiUrl(`/api/guides/${guide.id}/download`)}
             target="_blank"
             rel="noreferrer"
             className="px-4 py-2 text-sm font-medium uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors"
