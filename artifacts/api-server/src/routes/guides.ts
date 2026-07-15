@@ -10,7 +10,13 @@ const workspaceRoot = process.cwd().endsWith(path.join("artifacts", "api-server"
   ? path.resolve(process.cwd(), "../..")
   : process.cwd();
 
-const uploadsDir = path.resolve(workspaceRoot, "artifacts/api-server/uploads");
+const uploadsDir =
+  process.env.UPLOADS_DIR ??
+  path.resolve(workspaceRoot, "artifacts/api-server/uploads");
+const repoDownloadsDir = path.resolve(
+  workspaceRoot,
+  "artifacts/everydaygenius/src/downloads"
+);
 
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
@@ -20,6 +26,37 @@ const KNOWN_GUIDES: Record<string, string> = {
   "how-to-close-any-deal": "How to Close Any Business Deal",
   "underground-closing-techniques": "Underground Techniques Used by 7-Figure Closers That Most Will Never Know",
 };
+
+const GUIDE_DOWNLOAD_ALIASES: Record<string, string[]> = {
+  "how-to-close-any-deal": [
+    "EverydayGenius_HighTicketPlaybook.pdf",
+    "how-to-close-any-deal.pdf",
+  ],
+  "underground-closing-techniques": [
+    "EverydayGenius_Prospect_Dossier.pdf",
+    "underground-closing-techniques.pdf",
+  ],
+};
+
+function resolveGuideDownloadPath(guideId: string): string | null {
+  const candidateNames = [
+    `${guideId}.pdf`,
+    ...(GUIDE_DOWNLOAD_ALIASES[guideId] ?? []),
+  ];
+
+  const candidateDirs = [uploadsDir, repoDownloadsDir];
+
+  for (const dir of candidateDirs) {
+    for (const fileName of candidateNames) {
+      const filePath = path.join(dir, fileName);
+      if (fs.existsSync(filePath)) {
+        return filePath;
+      }
+    }
+  }
+
+  return null;
+}
 
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => cb(null, uploadsDir),
@@ -45,12 +82,12 @@ const upload = multer({
 
 router.get("/guides/status", (_req, res): void => {
   const statuses = Object.entries(KNOWN_GUIDES).map(([id, title]) => {
-    const filePath = path.join(uploadsDir, `${id}.pdf`);
-    const hasFile = fs.existsSync(filePath);
+    const filePath = resolveGuideDownloadPath(id);
+    const hasFile = filePath !== null;
     let fileName: string | null = null;
-    if (hasFile) {
+    if (hasFile && filePath) {
       const stats = fs.statSync(filePath);
-      fileName = `${id}.pdf (${(stats.size / 1024).toFixed(0)} KB)`;
+      fileName = `${path.basename(filePath)} (${(stats.size / 1024).toFixed(0)} KB)`;
     }
     return { id, title, hasFile, fileName };
   });
@@ -90,8 +127,8 @@ router.get("/guides/:guideId/download", (req, res): void => {
     return;
   }
 
-  const filePath = path.join(uploadsDir, `${guideId}.pdf`);
-  if (!fs.existsSync(filePath)) {
+  const filePath = resolveGuideDownloadPath(guideId);
+  if (!filePath) {
     res.status(404).json({ error: "File not yet available" });
     return;
   }

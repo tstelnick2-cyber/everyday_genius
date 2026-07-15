@@ -1,0 +1,46 @@
+app = "everydaygenius-api"
+primary_region = "iad"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  NODE_ENV = "production"
+  PORT = "8080"
+  UPLOADS_DIR = "/uploads"
+  FRONTEND_URL = ""
+
+# Persistent volume for PDF uploads. Create on the Fly dashboard before deploy:
+#   fly volumes create uploads --size 1
+# Or via CLI before first deploy.
+[[mounts]]
+  source = "uploads"
+  destination = "/uploads"
+
+[[services]]
+  internal_port = 8080
+  protocol = "tcp"
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+
+  [[services.ports]]
+    handlers = ["http"]
+    port = 80
+    force_https = true
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = 443
+
+  [services.concurrency]
+    type = "connections"
+    hard_limit = 250
+    soft_limit = 200
+
+  [[services.http_checks]]
+    interval = "10s"
+    timeout = "2s"
+    grace_period = "10s"
+    method = "get"
+    path = "/api/healthz"
