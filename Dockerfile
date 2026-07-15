@@ -12,7 +12,7 @@ COPY scripts ./scripts
 # All artifacts (only api-server is built, but everything is needed for workspace resolution)
 COPY artifacts ./artifacts
 
-RUN pnpm install --frozen-lockfile && \
+RUN pnpm install --no-frozen-lockfile && \
     pnpm --filter @workspace/api-server run build
 
 ENV NODE_ENV=production
